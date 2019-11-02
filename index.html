@@ -1,0 +1,69 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <div>
+            Players:
+            <ul class="card-deck">
+                <li class="card" v-for="player in players">
+                    <button @click="selectWinner(player)">{{player.name}} {{player.score}}</button>
+                </li>
+            </ul>
+        </div>
+        <div>
+            Player: <input type="text" v-model="newPlayerName" />
+            <button @click="addPlayer()">Add</button>
+        </div>
+
+        <button @click="showGames = !showGames">Select Game</button>
+
+        <div v-if="showGames">
+            <h2>Select Winner</h2>
+            <ul class="card-deck">
+                <li class="card" v-for="player in players">
+                    <button @click="selectWinner(player)">{{player.name}} {{player.score}}</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                showGames: false,
+                newPlayerName: '',
+                selectedPlayer: {},
+                players: JSON.parse(localStorage.getItem('players'))
+            },
+            methods: {
+                addPlayer() {
+                    let newPlayer = {
+                        name: this.newPlayerName,
+                        score: 0
+                    };
+
+                    this.players.push(newPlayer);
+                    this.newPlayerName = '';
+                },
+                selectWinner(player) {
+                    player.score += 1;
+                },
+                updateStorage() {
+                    localStorage.setItem('players', JSON.stringify(this.players))
+                }
+            }
+
+        })
+    </script>
+</body>
+
+</html>
